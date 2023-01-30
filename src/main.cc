@@ -34,8 +34,8 @@ extern const char *gitversion;
 void show_help() {
     printf("usage:\n"
         "xlibinput_calibrator [opts]\n"
-        "    --output-file-x11-config=<filename>   save the output to filename\n"
-        "    --output-file-xinput-cmd=<filename>   save the output to filename\n"
+        "    --output-file-x11-config=<filename>   save the output to <filename>\n"
+        "    --output-file-xinput-cmd=<filename>   save the output to <filename>\n"
         "    --threshold-misclick=<nn>     set the threshold for misclick to <nn>\n"
         "    --threshold-doubleclick=<nn>  set the threshold for doubleckick to <nn>\n"
         "    --device-name=<devname>       set the touch screen device by name\n"
@@ -48,6 +48,7 @@ void show_help() {
         "    --dont-save                   don't update X11 setting\n"
         "    --matrix=x1,x2..x9            start coefficent matrix\n"
         "    --monitor-number=<n>          show the output on the monitor '<n>'\n"
+        "    --no-timeout                  turns off the timeout\n"
         "\n"
         "xlibinput_calibrator --list-devices       show the devices availables\n"
         "\n"
@@ -121,6 +122,7 @@ int main(int argc, char** argv)
     bool show_conf_x11 = false;
     bool show_conf_xinput = false;
     bool not_save = false;
+    bool no_timeout = false;
     int monitor_nr = 0;
     std::string start_coeff;
     std::string matrix_name;
@@ -163,6 +165,9 @@ int main(int argc, char** argv)
             show_matrix = true;
         } else if (starts_with(arg, "--start-matrix=")) {
             start_coeff = arg.substr(15);
+        } else if (arg == "--no-timeout") {
+            no_timeout = true;
+
         } else if (arg == "--help" || arg == "-h") {
             show_help();
             exit(0);
@@ -257,6 +262,7 @@ int main(int argc, char** argv)
         printf("threshold-misclick:         %d\n", thr_misclick);
         printf("threshold-doubleclick:      %d\n", thr_doubleclick);
         printf("monitor-number:             %d\n", monitor_nr);
+        printf("no-timeout:                 %s\n", no_timeout ? "yes" : "no");
     }
 
 
