@@ -264,11 +264,13 @@ void GuiCalibratorX11::redraw()
                 (2 * cross_circle), (2 * cross_circle), 0, 360 * 64);
     }
 
-    // Draw the clock background
-    XSetForeground(display, gc, pixel[DIMGRAY]);
-    XSetLineAttributes(display, gc, 0, LineSolid, CapRound, JoinRound);
-    XFillArc(display, win, gc, (window_width-clock_radius)/2, (window_height - clock_radius)/2,
-                clock_radius, clock_radius, 0, 360 * 64);
+    if (no_timeout==false) {
+        // Draw the clock background
+        XSetForeground(display, gc, pixel[DIMGRAY]);
+        XSetLineAttributes(display, gc, 0, LineSolid, CapRound, JoinRound);
+        XFillArc(display, win, gc, (window_width-clock_radius)/2, (window_height - clock_radius)/2,
+                    clock_radius, clock_radius, 0, 360 * 64);
+    }
 }
 
 void GuiCalibratorX11::on_expose_event()
@@ -279,6 +281,11 @@ void GuiCalibratorX11::on_expose_event()
 void GuiCalibratorX11::on_timer_signal()
 {
     time_elapsed += time_step;
+    
+    if (no_timeout) {
+        return;
+    }
+    
     if (time_elapsed > max_time) {
         do_loop = false;
         return_value = false;
